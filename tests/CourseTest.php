@@ -5,7 +5,7 @@
     * @backupStatic Attributes disabled
     */
 
-    //require_once "src/Student.php";
+    require_once "src/Student.php";
     require_once "src/Course.php";
 
     $server = 'mysql:host=localhost;dbname=university_registrar_test';
@@ -17,7 +17,7 @@
     {
         protected function tearDown()
         {
-            //Student::deleteAll();
+            Student::deleteAll();
             Course::deleteAll();
         }
 
@@ -165,6 +165,30 @@
 
             //Assert
             $this->assertEquals($test_course, $result);
+        }
+
+        function testAddStudent()
+        {
+            //Arrange
+            $name = "History";
+            $course_number = "HIST101";
+            $id = 1;
+            $test_course = new Course($name, $course_number, $id);
+            $test_course->save();
+
+            $student_name = "Lebowski";
+            $enrollment_date = "2015-03-03";
+            $id2 = 2;
+            $test_student = new Student ($student_name, $enrollment_date, $id2);
+            $test_student->save();
+
+            //Act
+            $test_course->addStudent($test_student);
+            $result = $test_course->getStudents();
+
+            //Assert
+            $this->assertEquals([$test_student], $result);
+
         }
 
 

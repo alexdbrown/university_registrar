@@ -39,8 +39,34 @@
 
         function save()
         {
-            $GLOBALS['DB']->exec("INSERT INTO students (name, enrollment_date) VALUES ('{$this->getName()}', '{$this->getEnrollmentDate()}');");
+            $GLOBALS['DB']->exec("INSERT INTO students (name, enrollment_date)
+            VALUES ('{$this->getName()}', '{$this->getEnrollmentDate()}');");
             $this->id = $GLOBALS['DB']->lastInsertId();
+        }
+
+        function addCourse($course)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO enrollment (student_id, course_id) VALUES ({$this->getId()}, {$course->getId()});");
+        }
+
+        function getCourses()
+        {
+            $query = $GLOBALS['DB']->query("SELECT course_id FROM enrollment WHERE student_id = {$this->getId()};");
+            $course_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $courses = array();
+            foreach($course_ids as $id) {
+                $course_id = $id['course_id'];
+                $course_query = $GLOBALS['DB']->query("SELECT * FROM courses WHERE id = {$course_id};");
+                $returned_course = $course_query->fetchAll(PDO::FETCH_ASSOC);
+
+                $course_name = $returned_course[0]['name'];
+                $course_number = $returned_course[0]['course_number'];
+                $id = $returned_course[0]['id'];
+                $new_course = new Course($course_name, $course_number, $id);
+                array_push($courses, $new_course);
+            }
+            return $courses;
         }
 
         static function getAll()
@@ -74,6 +100,18 @@
                 return $found_student;
             }
         }
+
+        function update($new_name)
+        {
+            $GLOBALS['DB']->exec("UPDATE students SET name = '{$new_name}' WHERE id = {$this->getId()};");
+            $this->setName($new_name);
+        }
+
+        // function delete()
+        // {
+        //     $GLOBALS['DB']->exec("DELETE FROM students WHERE id = {$this->getId()};");
+        //     $GLOBALS['DB']->exec("DELETE FROM enrollment WHERE student_id = {$this->getId()};");
+        // }
 
     }
 
