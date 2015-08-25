@@ -191,8 +191,75 @@
 
         }
 
+        function testGetStudents()
+        {
+            //Arrange
+            $name = "Bowling";
+            $course_number = "400";
+            $id = 1;
+            $test_course = new Course($name, $course_number, $id);
+            $test_course->save();
 
+            $student_name = "Jeff Lebowski";
+            $enrollment_date = "1989-12-12";
+            $id2 = 2;
+            $test_student = new Student($student_name, $enrollment_date, $id2);
+            $test_student->save();
+
+            $student_name2 = "Walter";
+            $enrollment_date2 = "1888-12-12";
+            $id3 = 3;
+            $test_student2 = new Student($student_name2, $enrollment_date2, $id3);
+            $test_student2->save();
+
+            //Act
+            $test_course->addStudent($test_student);
+            $test_course->addStudent($test_student2);
+
+            //Assert
+            $this->assertEquals([$test_student, $test_student2], $test_course->getStudents());
+
+        }
+
+        function testDelete()
+        {
+            //Arrange
+            $name = "Bowling";
+            $course_number = "400";
+            $id = 1;
+            $test_course = new Course($name, $course_number, $id);
+            $test_course->save();
+
+            $student_name = "Jeff Lebowski";
+            $enrollment_date = "1989-12-12";
+            $id2 = 2;
+            $test_student = new Student($student_name, $enrollment_date, $id2);
+            $test_student->save();
+
+            //Act
+            $test_course->addStudent($test_student);
+            $test_course->delete();
+
+            //Assert
+            $this->assertEquals([], $test_student->getCourses());
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

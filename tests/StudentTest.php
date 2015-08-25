@@ -212,35 +212,35 @@
             $this->assertEquals([$test_course], $result);
         }
 
-        // function test_getCourses()
-        // {
-        //     //Arrange
-        //     $name = "History of Rugs";
-        //     $course_number = "200";
-        //     $id = 1;
-        //     $test_course = new Course($name, $course_number, $id);
-        //     $test_course->save();
-        //
-        //     $name2 = "White Russians";
-        //     $course_number2 = "400";
-        //     $id2 = 2;
-        //     $test_course2 = new Course($name2, $course_number2, $id2);
-        //     $test_course2->save();
-        //
-        //     $student_name = "Donnie";
-        //     $enrollment_date = "yesterday";
-        //     $id3 = 3;
-        //     $test_student = new Student($student_name, $enrollment_date, $id3);
-        //     $test_student->save();
-        //
-        //     //Act
-        //     $test_student->addCourse($test_course);
-        //     $test_student->addCourse($test_course2);
-        //     $result = $test_student->getCourses();
-        //     var_dump($result);
-        //     //Assert
-        //     $this->assertEquals([$test_course, $test_course2], $result);
-        // }
+        function test_getCourses()
+        {
+            //Arrange
+            $name = "History of Rugs";
+            $course_number = "200";
+            $id = 1;
+            $test_course = new Course($name, $course_number, $id);
+            $test_course->save();
+
+            $name2 = "White Russians";
+            $course_number2 = "400";
+            $id2 = 2;
+            $test_course2 = new Course($name2, $course_number2, $id2);
+            $test_course2->save();
+
+            $student_name = "Donnie";
+            $enrollment_date = "yesterday";
+            $id3 = 3;
+            $test_student = new Student($student_name, $enrollment_date, $id3);
+            $test_student->save();
+
+            //Act
+            $test_student->addCourse($test_course);
+            $test_student->addCourse($test_course2);
+            $result = $test_student->getCourses();
+            var_dump($result);
+            //Assert
+            $this->assertEquals([$test_course, $test_course2], $result);
+        }
         // function test_delete()
         // {
         //     //Arrange

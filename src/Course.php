@@ -38,6 +38,18 @@
             return $this->id;
         }
 
+        function update($new_name)
+        {
+            $GLOBALS['DB']->exec("UPDATE courses SET name = '{$new_name}' WHERE id = {$this->getId()};");
+            $this->setName($new_name);
+        }
+
+        function delete()
+        {
+            $GLOBALS['DB']->exec("DELETE FROM courses WHERE id = {$this->getId()};");
+            $GLOBALS['DB']->exec("DELETE FROM enrollment WHERE course_id = {$this->getId()};");
+        }
+
         function addStudent($new_student)
         {
             $GLOBALS['DB']->exec("INSERT INTO enrollment (student_id, course_id) VALUES ({$new_student->getId()}, {$this->getId()});");
@@ -45,24 +57,28 @@
 
         function getStudents()
         {
-            $query = $GLOBALS['DB']->query("SELECT student_id FROM enrollment
-            WHERE course_id = {$this->getId()};");
-            $student_ids = $query->fetchAll(PDO::FETCH_ASSOC);
-
-            $students = array();
-            foreach($student_ids as $id) {
-                $student_id = $id['student_id'];
-                $student_query = $GLOBALS['DB']->query("SELECT * FROM students WHERE id = {$student_id};");
-                $returned_student = $student_query->fetchAll(PDO::FETCH_ASSOC);
-
-                $name = $returned_student[0]['name'];
-                $enrollment_date = $returned_student[0]['enrollment_date'];
-                $id = $returned_student[0]['id'];
-                $new_student = new Student($name, $enrollment_date, $id);
-                array_push($students, $new_student);
-            }
-
-            return $students;
+            $query = $GLOBALS['DB']->query("SELECT courses.* FROM
+                students JOIN enrollment ON (students.id = enrollment.student_id)
+                        JOIN courses ON (enrollment.course_id = courses.id)
+                        WHERE students.id = {$this->getId()};");
+            // $query = $GLOBALS['DB']->query("SELECT student_id FROM enrollment
+            // WHERE course_id = {$this->getId()};");
+            // $student_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+            //
+            // $students = array();
+            // foreach($student_ids as $id) {
+            //     $student_id = $id['student_id'];
+            //     $student_query = $GLOBALS['DB']->query("SELECT * FROM students WHERE id = {$student_id};");
+            //     $returned_student = $student_query->fetchAll(PDO::FETCH_ASSOC);
+            //
+            //     $name = $returned_student[0]['name'];
+            //     $enrollment_date = $returned_student[0]['enrollment_date'];
+            //     $id = $returned_student[0]['id'];
+            //     $new_student = new Student($name, $enrollment_date, $id);
+            //     array_push($students, $new_student);
+            // }
+            //
+            // return $students;
         }
         function save()
         {
@@ -101,7 +117,6 @@
                 return $found_course;
             }
         }
-
 
 
 

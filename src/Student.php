@@ -113,6 +113,9 @@
         //     $GLOBALS['DB']->exec("DELETE FROM enrollment WHERE student_id = {$this->getId()};");
         // }
 
+
+
+
     }
 
 
