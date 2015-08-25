@@ -63,6 +63,21 @@
             $GLOBALS['DB']->exec("DELETE FROM courses;");
         }
 
+        static function find($search_id)
+        {
+            $found_course = null;
+            $courses = Course::getAll();
+            foreach ($courses as $course) {
+                $course_id = $course->getId();
+                if($course_id == $search_id) {
+                    $found_course = $course;
+                }
+                return $found_course;
+            }
+        }
+
+
+
 
 
 
