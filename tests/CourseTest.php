@@ -15,11 +15,11 @@
 
     class CourseTest extends PHPUnit_Framework_TestCase
     {
-        // protected function tearDown()
-        // {
-        //     Student::deleteAll();
-        //     Course::deleteAll();
-        // }
+        protected function tearDown()
+        {
+            //Student::deleteAll();
+            Course::deleteAll();
+        }
 
         function test_setName()
         {
@@ -77,6 +77,75 @@
 
             //Assert
             $this->assertEquals($course_number, $result);
+        }
+
+        function test_getId()
+        {
+            //Arrange
+            $name = "History";
+            $course_number = "HIST101";
+            $id = 1;
+            $test_course = new Course($name, $course_number, $id);
+
+            //Act
+            $result = $test_course->getId();
+
+            //Assert
+            $this->assertEquals(true, is_numeric($result));
+        }
+
+        function save()
+        {
+            //Arrange
+            $name = "History";
+            $course_number = "HIST101";
+            $test_course = new Course($name, $course_number);
+
+            //Act
+            $test_course->save();
+
+            //Assert
+            $result = Course::getAll();
+            $this->assertEquals($test_course, $result[0]);
+        }
+
+        function testGetAll()
+        {
+            //Arrange
+            $name = "History";
+            $course_number = "HIST101";
+            $name2 = "English";
+            $course_number2 = "ENG500";
+            $test_course = new Course($name, $course_number);
+            $test_course->save();
+            $test_course2 = new Course($name2, $course_number2);
+            $test_course2->save();
+
+            //Act
+            $result = Course::getAll();
+
+            //Assert
+            $this->assertEquals([$test_course, $test_course2], $result);
+        }
+
+        function testDeleteAll()
+        {
+            //Arrange
+            $name = "History";
+            $course_number = "HIST101";
+            $name2 = "English";
+            $course_number2 = "ENG500";
+            $test_course = new Course($name, $course_number);
+            $test_course->save();
+            $test_course2 = new Course($name2, $course_number2);
+            $test_course2->save();
+
+            //Act
+            Course::deleteAll();
+
+            //Assert
+            $result = Course::getAll();
+            $this->assertEquals([], $result);
         }
 
 
